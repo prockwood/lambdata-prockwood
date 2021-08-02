@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def null_count(df):
     return df.isna().sum().sum()
