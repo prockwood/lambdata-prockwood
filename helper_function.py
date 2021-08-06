@@ -12,7 +12,8 @@ def train_test_split(df, seed, frac):
     """
     Takes a DataFrame and returns two DataFrames of randomly selected
     rows. The second argument sets a seed for the random generator.
-    The third argument assigns the size of the first returned Dataframe.
+    The third argument assigns the size of the first returned Dataframe as
+    a proportion of the input DataFrame's row-length.
     """
     np.random.seed(seed)
     choice_len = round(len(df) * frac)
@@ -49,22 +50,22 @@ def check_elements_eq(df1, df2):
     indicating whether all elements of the two objects are equivalent.
     Supports the comparison of null types, which pd.DataFrame.equal() does'nt.
     """
-
+    # convert Series' to DataFrames
     if type(df1) == pd.core.series.Series:
         df1 = df1.to_frame().T
     if type(df2) == pd.core.series.Series:
         df2 = df2.to_frame().T
-
+    # raise error if shapes mismatch
     if df1.shape != df2.shape:
-#         print(df1.shape, df2.shape)
         raise Exception("df1 and df2 are not of the same shape")
-
+    #loop over each element. if null values, check isna(), else simply compare.
     for i in range(df1.shape[0]):
         for j in range(df1.shape[1]):
             if pd.isna(df1.iloc[i,j]) == True:
                 if pd.isna(df2.iloc[i,j]):
                     continue
                 else:
+                    #print the first mismatch found
                     print(f"Elements at position ({i}, {j}) are not equivalent.")
                     return False
             else:
@@ -74,3 +75,4 @@ def check_elements_eq(df1, df2):
                     print(f"Elements at position ({i}, {j}) are not equivalent.")
                     return False
     return True
+
